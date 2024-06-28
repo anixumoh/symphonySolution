@@ -1,0 +1,372 @@
+{
+	"info": {
+		"_postman_id": "390562f5-71fc-45f4-ada7-923c516a3a8f",
+		"name": "JSON-Placeholder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10733197"
+	},
+	"item": [
+		{
+			"name": "get-all-posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.require('@winter-water-813648/response-data');\r",
+							"const total_initial_posts = pm.variables.get(\"inital_total_posts\");\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code == 200) {\r",
+							"    const current_total_posts = responseData.jsonResponse().length;\r",
+							"\r",
+							"    pm.collectionVariables.set(\"total_no_posts\", current_total_posts)\r",
+							"\r",
+							"    if (total_initial_posts >= 0) {\r",
+							"        pm.test(\"Total initial post is greater than total current post\", function () {\r",
+							"            if (total_initial_posts == current_total_posts) {\r",
+							"                pm.expect.fail(\"This failed because the inital and current values matched\")\r",
+							"            }\r",
+							"        })\r",
+							"    }\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {
+							"@winter-water-813648/response-data": {
+								"id": "01902bbe-36c3-78cb-ad6f-e8e368cea8f2"
+							}
+						}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.clear()\r",
+							"const initial_posts =  pm.collectionVariables.get(\"total_no_posts\");\r",
+							"pm.variables.set(\"inital_total_posts\", initial_posts)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-a-post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.require('@winter-water-813648/response-data');\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code == 201) {\r",
+							"    const post_id = responseData.jsonResponse().id;\r",
+							"    pm.collectionVariables.set(\"new_post_id\", post_id)\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {
+							"@winter-water-813648/response-data": {
+								"id": "01902bbe-36c3-78cb-ad6f-e8e368cea8f2"
+							}
+						}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 1,\r\n    \"title\": \"This is a new test\",\r\n    \"body\": \"Sample post\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-a-post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.require('@winter-water-813648/response-data');\r",
+							"\r",
+							"if (pm.response.code == 200) {\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"\r",
+							"    const total_posts = responseData.jsonResponse().length;\r",
+							"    pm.collectionVariables.set(\"total_no_posts\", total_posts)\r",
+							"} else {\r",
+							"    pm.test(\"Status code is 404\", function () {\r",
+							"        pm.response.to.have.status(404);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {
+							"@winter-water-813648/response-data": {
+								"id": "01902bbe-36c3-78cb-ad6f-e8e368cea8f2"
+							}
+						}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/:id",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patch-a-post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.require('@winter-water-813648/response-data');\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code == 200) {\r",
+							"    const post_id = responseData.jsonResponse().id;\r",
+							"    pm.collectionVariables.set(\"new_post_id\", post_id)\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {
+							"@winter-water-813648/response-data": {
+								"id": "01902bbe-36c3-78cb-ad6f-e8e368cea8f2"
+							}
+						}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"This is a patch test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/:id",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{new_post_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-a-post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.require('@winter-water-813648/response-data');\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code == 200) {\r",
+							"    const total_posts = responseData.jsonResponse().length;\r",
+							"    pm.collectionVariables.set(\"total_no_posts\", total_posts)\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {
+							"@winter-water-813648/response-data": {
+								"id": "01902bbe-36c3-78cb-ad6f-e8e368cea8f2"
+							}
+						}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/:id",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "101"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "total_no_posts",
+			"value": ""
+		},
+		{
+			"key": "new_post_id",
+			"value": ""
+		}
+	]
+}
